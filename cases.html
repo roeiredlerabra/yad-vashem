@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מערכת ניהול פניות - יד ושם</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <!-- Login Screen -->
+    <div id="loginScreen" class="min-h-screen flex items-center justify-center">
+        <div class="bg-white p-8 rounded-lg shadow-md w-96">
+            <div class="text-center mb-6">
+                <img 
+                    src="/api/placeholder/208/96"
+                    alt="Yad Vashem Logo" 
+                    class="mx-auto mb-4"
+                >
+                <h2 class="text-2xl font-bold text-gray-800">התחברות למערכת</h2>
+            </div>
+            <form id="loginForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">שם משתמש</label>
+                    <input type="text" id="username" class="w-full p-2 border rounded-md" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">סיסמה</label>
+                    <input type="password" id="password" class="w-full p-2 border rounded-md" required>
+                </div>
+                <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700">
+                    כניסה
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Dashboard (Hidden by default) -->
+    <div id="dashboard" class="hidden">
+        <!-- Header -->
+        <header class="bg-white shadow-md">
+            <div class="container mx-auto px-4 py-6">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center gap-6">
+                        <img 
+                            src="/api/placeholder/208/96"
+                            alt="Yad Vashem Logo" 
+                            class="w-52 h-24"
+                        >
+                        <h1 class="text-2xl font-bold text-gray-800">ניהול פניות</h1>
+                    </div>
+                    <button onclick="logout()" class="text-gray-600 hover:text-gray-800">
+                        התנתק
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="container mx-auto px-4 py-8">
+            <!-- Filters -->
+            <div class="bg-white rounded-lg shadow-md p-4 mb-6">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">סטטוס</label>
+                        <select class="w-full p-2 border rounded-md">
+                            <option value="">הכל</option>
+                            <option value="new">חדש</option>
+                            <option value="in_progress">בטיפול</option>
+                            <option value="pending">ממתין למידע</option>
+                            <option value="completed">הושלם</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">תאריך מ-</label>
+                        <input type="date" class="w-full p-2 border rounded-md">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">תאריך עד-</label>
+                        <input type="date" class="w-full p-2 border rounded-md">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">חיפוש</label>
+                        <input type="text" placeholder="חיפוש לפי שם/מספר פנייה" class="w-full p-2 border rounded-md">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cases Grid -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                מספר פנייה
+                            </th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                תאריך פתיחה
+                            </th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                שם הפונה
+                            </th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                שם המבוקש
+                            </th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                סטטוס
+                            </th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                מטפל
+                            </th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                פעולות
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <!-- Sample Data -->
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2024-001</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">01/01/2024</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">ישראל ישראלי</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">יעקב כהן</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                    חדש
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">שרה לוי</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                <button class="text-blue-600 hover:text-blue-900">צפייה</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2024-002</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">02/01/2024</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">רחל כהן</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">משה לוי</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                    בטיפול
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">דוד כהן</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                <button class="text-blue-600 hover:text-blue-900">צפייה</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Authentication handling
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Demo authentication - in production, this should be replaced with proper authentication
+            if (username === 'demo' && password === 'demo123') {
+                document.getElementById('loginScreen').classList.add('hidden');
+                document.getElementById('dashboard').classList.remove('hidden');
+            } else {
+                alert('שם משתמש או סיסמה שגויים');
+            }
+        });
+
+        // Logout function
+        function logout() {
+            document.getElementById('dashboard').classList.add('hidden');
+            document.getElementById('loginScreen').classList.remove('hidden');
+            document.getElementById('loginForm').reset();
+        }
+    </script>
+</body>
+</html>
