@@ -5,106 +5,136 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>מערכת ניהול פניות - יד ושם</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-50">
     <!-- Navigation Bar -->
-    <nav class="bg-white shadow-md">
-        <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
-            <div class="relative flex items-center justify-between h-16">
-                <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
-                    <!-- Mobile menu button-->
-                    <button type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" aria-controls="mobile-menu" aria-expanded="false">
-                        <span class="sr-only">Open main menu</span>
-                        <!-- Icon when menu is closed. -->
-                        <!--
-                            Heroicon name: menu
-
-                            Menu open: "hidden", Menu closed: "block"
-                        -->
-                        <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-                        </svg>
-                        <!-- Icon when menu is open. -->
-                        <!--
-                            Heroicon name: x
-
-                            Menu open: "block", Menu closed: "hidden"
-                        -->
-                        <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
+    <nav class="bg-blue-800 text-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-8">
+                    <img src="https://www.yadvashem.org/yv/he/images/hebrew-logo-white.png" alt="Yad Vashem Logo" class="h-10">
+                    <div class="hidden md:flex space-x-4">
+                        <a href="#" class="px-3 py-2 rounded-md text-sm font-medium bg-blue-900">דף הבית</a>
+                        <a href="#" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-700">פניות חדשות</a>
+                        <a href="#" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-700">דוחות</a>
+                        <a href="#" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-700">הגדרות</a>
+                    </div>
                 </div>
-                <div class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
-                    <div class="flex-shrink-0">
-                        <img class="h-8 w-auto" src="/api/placeholder/208/96" alt="Yad Vashem Logo">
-                    </div>
-                    <div class="hidden sm:block sm:ml-6">
-                        <div class="flex space-x-4">
-                            <a href="#" class="text-gray-900 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Home</a>
-                            <a href="#" class="text-gray-900 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">About</a>
-                            <a href="#" class="text-gray-900 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Contact</a>
-                        </div>
-                    </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm"><i class="fas fa-user mr-2"></i>שלום, משתמש</span>
+                    <button onclick="logout()" class="text-sm hover:text-gray-300">
+                        <i class="fas fa-sign-out-alt mr-1"></i>התנתק
+                    </button>
                 </div>
             </div>
         </div>
     </nav>
-    <!-- End of Navigation Bar -->
+
     <!-- Login Screen -->
-    <div id="loginScreen" class="min-h-screen flex items-center justify-center"> <div class="bg-white p-8 rounded-lg shadow-md w-96">
+    <div id="loginScreen" class="min-h-screen flex items-center justify-center">
+        <div class="bg-white p-8 rounded-lg shadow-md w-96">
             <div class="text-center mb-6">
-                <img 
-                    src="/api/placeholder/208/96"
-                    alt="Yad Vashem Logo" 
-                    class="mx-auto mb-4"
-                >
+                <img src="https://www.yadvashem.org/yv/he/images/logo-color.png" alt="Yad Vashem Logo" class="mx-auto mb-4">
                 <h2 class="text-2xl font-bold text-gray-800">התחברות למערכת</h2>
             </div>
             <form id="loginForm" class="space-y-4">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">שם משתמש</label>
-                    <input type="text" id="username" class="w-full p-2 border rounded-md" required>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        <i class="fas fa-user mr-1"></i>שם משתמש
+                    </label>
+                    <input type="text" id="username" class="w-full p-2 border rounded-md" placeholder="הכנס שם משתמש" required>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">סיסמה</label>
-                    <input type="password" id="password" class="w-full p-2 border rounded-md" required>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        <i class="fas fa-lock mr-1"></i>סיסמה
+                    </label>
+                    <input type="password" id="password" class="w-full p-2 border rounded-md" placeholder="הכנס סיסמה" required>
                 </div>
                 <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700">
-                    כניסה
+                    <i class="fas fa-sign-in-alt mr-2"></i>כניסה
                 </button>
             </form>
         </div>
     </div>
 
-    <!-- Main Dashboard (Hidden by default) -->
+    <!-- Main Dashboard -->
     <div id="dashboard" class="hidden">
-        <!-- Header -->
-        <header class="bg-white shadow-md">
-            <div class="container mx-auto px-4 py-6">
-                <div class="flex justify-between items-center">
-                    <div class="flex items-center gap-6">
-                        <img 
-                            src="/api/placeholder/208/96"
-                            alt="Yad Vashem Logo" 
-                            class="w-52 h-24"
-                        >
-                        <h1 class="text-2xl font-bold text-gray-800">ניהול פניות</h1>
+        <!-- Stats Cards -->
+        <div class="container mx-auto px-4 py-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex items-center">
+                        <div class="p-3 bg-blue-100 rounded-full">
+                            <i class="fas fa-file-alt text-blue-600 text-xl"></i>
+                        </div>
+                        <div class="mr-4">
+                            <p class="text-gray-500 text-sm">סה"כ פניות</p>
+                            <p class="text-2xl font-bold">1,234</p>
+                        </div>
                     </div>
-                    <button onclick="logout()" class="text-gray-600 hover:text-gray-800">
-                        התנתק
-                    </button>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex items-center">
+                        <div class="p-3 bg-green-100 rounded-full">
+                            <i class="fas fa-check-circle text-green-600 text-xl"></i>
+                        </div>
+                        <div class="mr-4">
+                            <p class="text-gray-500 text-sm">פניות שהושלמו</p>
+                            <p class="text-2xl font-bold">892</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex items-center">
+                        <div class="p-3 bg-yellow-100 rounded-full">
+                            <i class="fas fa-clock text-yellow-600 text-xl"></i>
+                        </div>
+                        <div class="mr-4">
+                            <p class="text-gray-500 text-sm">בטיפול</p>
+                            <p class="text-2xl font-bold">342</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex items-center">
+                        <div class="p-3 bg-red-100 rounded-full">
+                            <i class="fas fa-exclamation-circle text-red-600 text-xl"></i>
+                        </div>
+                        <div class="mr-4">
+                            <p class="text-gray-500 text-sm">ממתינות לטיפול</p>
+                            <p class="text-2xl font-bold">42</p>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </header>
 
-        <!-- Main Content -->
-        <main class="container mx-auto px-4 py-8">
+            <!-- Charts Row -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <!-- Status Chart Container -->
+                <div class="bg-white p-4 rounded-lg shadow-md">
+                    <h3 class="text-lg font-semibold mb-2">התפלגות סטטוס פניות</h3>
+                    <div class="relative" style="height: 200px; width: 100%;">
+                        <canvas id="statusChart"></canvas>
+                    </div>
+                </div>
+                <!-- Monthly Chart Container -->
+                <div class="bg-white p-4 rounded-lg shadow-md">
+                    <h3 class="text-lg font-semibold mb-2">פניות לפי חודש</h3>
+                    <div class="relative" style="height: 200px; width: 100%;">
+                        <canvas id="monthlyChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
             <!-- Filters -->
             <div class="bg-white rounded-lg shadow-md p-4 mb-6">
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">סטטוס</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            <i class="fas fa-filter mr-1"></i>סטטוס
+                        </label>
                         <select class="w-full p-2 border rounded-md">
                             <option value="">הכל</option>
                             <option value="new">חדש</option>
@@ -114,15 +144,21 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">תאריך מ-</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            <i class="far fa-calendar mr-1"></i>תאריך מ-
+                        </label>
                         <input type="date" class="w-full p-2 border rounded-md">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">תאריך עד-</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            <i class="far fa-calendar mr-1"></i>תאריך עד-
+                        </label>
                         <input type="date" class="w-full p-2 border rounded-md">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">חיפוש</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            <i class="fas fa-search mr-1"></i>חיפוש
+                        </label>
                         <input type="text" placeholder="חיפוש לפי שם/מספר פנייה" class="w-full p-2 border rounded-md">
                     </div>
                 </div>
@@ -133,44 +169,27 @@
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                מספר פנייה
-                            </th>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                תאריך פתיחה
-                            </th>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                שם הפונה
-                            </th>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                שם המבוקש
-                            </th>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                סטטוס
-                            </th>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                מטפל
-                            </th>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                פעולות
-                            </th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">מספר פנייה</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">תאריך פתיחה</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">שם הפונה</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">שם המבוקש</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">סטטוס</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">מטפל</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">פעולות</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
-                        <!-- Sample Data -->
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2024-001</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">01/01/2024</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">ישראל ישראלי</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">יעקב כהן</td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                    חדש
-                                </span>
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">חדש</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">שרה לוי</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                <button class="text-blue-600 hover:text-blue-900">צפייה</button>
+                                <button class="text-blue-600 hover:text-blue-900"><i class="fas fa-eye mr-1"></i>צפייה</button>
                             </td>
                         </tr>
                         <tr>
@@ -179,19 +198,95 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">רחל כהן</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">משה לוי</td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                                    בטיפול
-                                </span>
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">בטיפול</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">דוד כהן</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                <button class="text-blue-600 hover:text-blue-900">צפייה</button>
+                                <button class="text-blue-600 hover:text-blue-900"><i class="fas fa-eye mr-1"></i>צפייה</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2024-003</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">03/01/2024</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">דן לוי</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">אברהם כהן</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">ממתין למידע</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">מיכל ברק</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                <button class="text-blue-600 hover:text-blue-900"><i class="fas fa-eye mr-1"></i>צפייה</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2024-004</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">04/01/2024</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">יוסף אברהם</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">שמעון לוי</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">דחוף</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">רות כהן</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                <button class="text-blue-600 hover:text-blue-900"><i class="fas fa-eye mr-1"></i>צפייה</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2024-005</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">05/01/2024</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">חנה גולדברג</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">יצחק מאיר</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">הושלם</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">אסתר לוין</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                <button class="text-blue-600 hover:text-blue-900"><i class="fas fa-eye mr-1"></i>צפייה</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2024-006</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">06/01/2024</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">משה פרידמן</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">אהרון רבינוביץ</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">בטיפול</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">יעקב שטרן</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                <button class="text-blue-600 hover:text-blue-900"><i class="fas fa-eye mr-1"></i>צפייה</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2024-007</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">07/01/2024</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">שרה ברקוביץ</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">דוד רוזנפלד</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">בבדיקה</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">לאה גרינברג</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                <button class="text-blue-600 hover:text-blue-900"><i class="fas fa-eye mr-1"></i>צפייה</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2024-008</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">08/01/2024</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">אברהם וייס</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">מנחם קליין</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">ממתין למידע</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">רבקה הורביץ</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                <button class="text-blue-600 hover:text-blue-900"><i class="fas fa-eye mr-1"></i>צפייה</button>
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-        </main>
+        </div>
     </div>
 
     <script>
@@ -201,10 +296,10 @@
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
-            // Demo authentication - in production, this should be replaced with proper authentication
             if (username === 'demo' && password === 'demo123') {
                 document.getElementById('loginScreen').classList.add('hidden');
                 document.getElementById('dashboard').classList.remove('hidden');
+                initializeCharts(); // Initialize charts after dashboard is shown
             } else {
                 alert('שם משתמש או סיסמה שגויים');
             }
@@ -216,6 +311,92 @@
             document.getElementById('loginScreen').classList.remove('hidden');
             document.getElementById('loginForm').reset();
         }
-    </script>
+
+        // Charts initialization
+        function initializeCharts() {
+    // Status Distribution Chart
+    const statusCtx = document.getElementById('statusChart').getContext('2d');
+    new Chart(statusCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['חדש', 'בטיפול', 'ממתין למידע', 'הושלם', 'דחוף'],
+            datasets: [{
+                data: [30, 25, 15, 20, 10],
+                backgroundColor: [
+                    '#10B981',
+                    '#F59E0B',
+                    '#3B82F6',
+                    '#6366F1',
+                    '#EF4444'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'right',
+                    labels: {
+                        boxWidth: 12,
+                        padding: 8,
+                        font: {
+                            size: 11
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // Monthly Inquiries Chart
+    const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+    new Chart(monthlyCtx, {
+        type: 'line',
+        data: {
+            labels: ['ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני'],
+            datasets: [{
+                label: 'מספר פניות',
+                data: [65, 78, 90, 85, 95, 110],
+                fill: false,
+                borderColor: '#3B82F6',
+                tension: 0.1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {
+                        boxWidth: 12,
+                        padding: 8,
+                        font: {
+                            size: 11
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        font: {
+                            size: 10
+                        }
+                    }
+                },
+                x: {
+                    ticks: {
+                        font: {
+                            size: 10
+                        }
+                    }
+                }
+            }
+        }
+    });
+} </script>
 </body>
 </html>
