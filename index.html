@@ -12,7 +12,76 @@
 
         transform: rotate(180deg);
     }
+    .chat-icon {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1000;
+    }
 
+    .chat-button {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background-color: #1e3a8a;
+        color: white;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        transition: transform 0.2s;
+    }
+
+    .chat-button:hover {
+        transform: scale(1.1);
+    }
+
+    .chat-window {
+        position: fixed;
+        bottom: 100px;
+        right: 20px;
+        width: 400px;
+        height: 600px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .chat-header {
+        background-color: #1e3a8a;
+        color: white;
+        padding: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 10px 10px 0 0;
+    }
+
+    .close-button {
+        background: none;
+        border: none;
+        color: white;
+        cursor: pointer;
+    }
+
+    .chat-content {
+        flex: 1;
+        overflow: hidden;
+    }
+
+    .chat-content iframe {
+        width: 100%;
+        height: 100%;
+    }
+
+    .hidden {
+        display: none;
+    }
 </style>
 <body class="bg-gray-50">
     <!-- Navigation Bar -->
@@ -256,7 +325,10 @@
             selectedFiles.splice(index, 1);
             updateFileList();
         }
-
+        function toggleChat() {
+        const chatWindow = document.getElementById('chatWindow');
+        chatWindow.classList.toggle('hidden');
+    }
         // Event Listeners
         document.addEventListener('DOMContentLoaded', () => {
             const form = document.getElementById('inquiryForm');
@@ -374,5 +446,27 @@ form.addEventListener('submit', async (e) => {
 });
     });
     </script>
+    <!-- Floating Chat Icon -->
+<div id="chatIcon" class="chat-icon">
+    <button onclick="toggleChat()" class="chat-button">
+        <span class="material-icons">chat</span>
+    </button>
+</div>
+
+<!-- Chat Window -->
+<div id="chatWindow" class="chat-window hidden">
+    <div class="chat-header">
+        <span>צ'אט עזרה</span>
+        <button onclick="toggleChat()" class="close-button">
+            <span class="material-icons">close</span>
+        </button>
+    </div>
+    <div class="chat-content">
+        <iframe 
+            src="https://copilotstudio.microsoft.com/environments/2df7900b-b721-4656-b18b-66896cb886bb/bots/abra_caseManagementYadVshemSearchedPerson/webchat?__version__=2" 
+            frameborder="0">
+        </iframe>
+    </div>
+</div>
 </body>
 </html>
