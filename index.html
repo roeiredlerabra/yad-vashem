@@ -44,6 +44,8 @@
         right: 20px;
         width: 400px;
         height: 600px;
+        max-width: calc(100vw - 40px);
+        max-height: calc(100vh - 140px);
         background: white;
         border-radius: 10px;
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
@@ -67,6 +69,10 @@
         border: none;
         color: white;
         cursor: pointer;
+        padding: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .chat-content {
@@ -77,10 +83,73 @@
     .chat-content iframe {
         width: 100%;
         height: 100%;
+        border: none;
     }
 
     .hidden {
         display: none;
+    }
+
+    /* Responsive Design */
+    @media screen and (max-width: 768px) {
+        .chat-window {
+            bottom: 0;
+            right: 0;
+            width: 100%;
+            height: 100vh;
+            max-width: 100%;
+            max-height: 100vh;
+            border-radius: 0;
+        }
+
+        .chat-header {
+            border-radius: 0;
+        }
+
+        .chat-button {
+            width: 50px;
+            height: 50px;
+        }
+
+        .chat-icon {
+            bottom: 15px;
+            right: 15px;
+        }
+
+        .material-icons {
+            font-size: 24px;
+        }
+    }
+
+    @media screen and (max-height: 600px) {
+        .chat-window {
+            height: 100vh;
+            bottom: 0;
+        }
+    }
+
+    /* Safe Area for iOS */
+    @supports (padding: max(0px)) {
+        .chat-window {
+            padding-bottom: max(0px, env(safe-area-inset-bottom));
+        }
+        
+        .chat-icon {
+            bottom: max(20px, env(safe-area-inset-bottom) + 20px);
+        }
+    }
+
+    /* Animation */
+    .chat-window {
+        transition: all 0.3s ease-in-out;
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .chat-window.hidden {
+        opacity: 0;
+        transform: translateY(20px);
+        pointer-events: none;
     }
 </style>
 <body class="bg-gray-50">
@@ -328,7 +397,24 @@
         function toggleChat() {
         const chatWindow = document.getElementById('chatWindow');
         chatWindow.classList.toggle('hidden');
+        
+        // Prevent body scrolling when chat is open on mobile
+        if (!chatWindow.classList.contains('hidden') && window.innerWidth <= 768) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'auto';
+        }
     }
+
+    // Handle resize events
+    window.addEventListener('resize', () => {
+        const chatWindow = document.getElementById('chatWindow');
+        if (!chatWindow.classList.contains('hidden') && window.innerWidth <= 768) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'auto';
+        }
+    });
         // Event Listeners
         document.addEventListener('DOMContentLoaded', () => {
             const form = document.getElementById('inquiryForm');
@@ -456,7 +542,7 @@ form.addEventListener('submit', async (e) => {
 <!-- Chat Window -->
 <div id="chatWindow" class="chat-window hidden">
     <div class="chat-header">
-        <span>צ'אט עזרה</span>
+        <span>בוט פתיחת פנייה בנושא חיפוש אדם</span>
         <button onclick="toggleChat()" class="close-button">
             <span class="material-icons">close</span>
         </button>
