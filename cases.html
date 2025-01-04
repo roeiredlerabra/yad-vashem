@@ -8,6 +8,37 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
+<style>
+    @media (max-width: 768px) {
+        .table-container {
+            margin: 0 -1rem;
+        }
+        
+        table {
+            font-size: 0.875rem;
+        }
+        
+        th, td {
+            white-space: nowrap;
+            padding: 0.5rem !important;
+        }
+    }
+    
+    /* Add smooth transition for modal */
+    #caseModal {
+        transition: opacity 0.3s ease-in-out;
+    }
+    
+    #caseModal.hidden {
+        opacity: 0;
+        pointer-events: none;
+    }
+    
+    #caseModal:not(.hidden) {
+        opacity: 1;
+    }
+    </style>
+    
 <body class="bg-gray-50">
     <!-- Navigation Bar -->
     <nav class="bg-blue-800 text-white">
@@ -166,19 +197,20 @@
 
             <!-- Cases Grid -->
             <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">מספר פנייה</th>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">תאריך פתיחה</th>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">שם הפונה</th>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">שם המבוקש</th>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">סטטוס</th>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">מטפל</th>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">פעולות</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">מספר פנייה</th>
+                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">תאריך פתיחה</th>
+                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">שם הפונה</th>
+                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">שם המבוקש</th>
+                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">סטטוס</th>
+                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">מטפל</th>
+                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">פעולות</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2024-001</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">01/01/2024</td>
@@ -283,9 +315,27 @@
                                 <button class="text-blue-600 hover:text-blue-900"><i class="fas fa-eye mr-1"></i>צפייה</button>
                             </td>
                         </tr>
+                        
                     </tbody>
                 </table>
             </div>
+            </div>
+            <div class="flex justify-center py-4 border-t border-gray-200">
+                <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                    <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                        <span class="sr-only">הקודם</span>
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+                    <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">1</a>
+                    <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">2</a>
+                    <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">3</a>
+                    <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                        <span class="sr-only">הבא</span>
+                        <i class="fas fa-chevron-left"></i>
+                    </a>
+                </nav>
+            </div>
+        
         </div>
     </div>
 
@@ -304,7 +354,58 @@
                 alert('שם משתמש או סיסמה שגויים');
             }
         });
+        function showModal(caseRow) {
+    const modal = document.getElementById('caseModal');
+    const cells = caseRow.getElementsByTagName('td');
+    
+    // Populate modal with row data
+    document.getElementById('modalCaseId').textContent = cells[0].textContent;
+    document.getElementById('modalDate').textContent = cells[1].textContent;
+    document.getElementById('modalRequester').textContent = cells[2].textContent;
+    document.getElementById('modalSubject').textContent = cells[3].textContent;
+    document.getElementById('modalStatus').textContent = cells[4].textContent;
+    document.getElementById('modalHandler').textContent = cells[5].textContent;
+    
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
+}
+document.addEventListener('DOMContentLoaded', function() {
+    const viewButtons = document.querySelectorAll('button.text-blue-600');
+    viewButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const row = this.closest('tr');
+            showModal(row);
+        });
+    });
+});
 
+
+
+// Add responsive table styles
+const table = document.querySelector('table');
+table.classList.add('block', 'md:table', 'w-full', 'overflow-x-auto');
+
+const headers = table.querySelectorAll('th');
+headers.forEach(header => {
+    header.classList.add('min-w-[120px]');
+});
+
+// Make status column fixed width
+const statusHeaders = table.querySelectorAll('th:nth-child(5), td:nth-child(5)');
+statusHeaders.forEach(cell => {
+    cell.classList.add('w-24');
+});
+
+// Make actions column fixed width
+const actionHeaders = table.querySelectorAll('th:last-child, td:last-child');
+actionHeaders.forEach(cell => {
+    cell.classList.add('w-20');
+});
+function closeModal() {
+    const modal = document.getElementById('caseModal');
+    modal.classList.add('hidden');
+    document.body.style.overflow = 'auto'; // Restore scrolling
+}
         // Logout function
         function logout() {
             document.getElementById('dashboard').classList.add('hidden');
@@ -398,5 +499,49 @@
         }
     });
 } </script>
+<!-- Modal -->
+<div id="caseModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+        <div class="flex flex-col">
+            <div class="flex justify-between items-center border-b pb-3">
+                <h3 class="text-xl font-semibold text-gray-900">פרטי פנייה</h3>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-gray-500">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="mt-4">
+                <div class="mb-4">
+                    <p class="text-sm font-medium text-gray-500">מספר פנייה</p>
+                    <p id="modalCaseId" class="mt-1 text-sm text-gray-900"></p>
+                </div>
+                <div class="mb-4">
+                    <p class="text-sm font-medium text-gray-500">תאריך פתיחה</p>
+                    <p id="modalDate" class="mt-1 text-sm text-gray-900"></p>
+                </div>
+                <div class="mb-4">
+                    <p class="text-sm font-medium text-gray-500">שם הפונה</p>
+                    <p id="modalRequester" class="mt-1 text-sm text-gray-900"></p>
+                </div>
+                <div class="mb-4">
+                    <p class="text-sm font-medium text-gray-500">שם המבוקש</p>
+                    <p id="modalSubject" class="mt-1 text-sm text-gray-900"></p>
+                </div>
+                <div class="mb-4">
+                    <p class="text-sm font-medium text-gray-500">סטטוס</p>
+                    <p id="modalStatus" class="mt-1 text-sm text-gray-900"></p>
+                </div>
+                <div class="mb-4">
+                    <p class="text-sm font-medium text-gray-500">מטפל</p>
+                    <p id="modalHandler" class="mt-1 text-sm text-gray-900"></p>
+                </div>
+            </div>
+            <div class="mt-4 border-t pt-3">
+                <button onclick="closeModal()" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700">
+                    סגור
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
