@@ -346,7 +346,7 @@
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
-            if (username === 'demo' && password === 'demo123') {
+            if (username && password) {
                 document.getElementById('loginScreen').classList.add('hidden');
                 document.getElementById('dashboard').classList.remove('hidden');
                 initializeCharts(); // Initialize charts after dashboard is shown
